@@ -1,0 +1,222 @@
+@import url("https://fonts.googleapis.com/css?family=Ubuntu:regular,500,700&display=swap");
+@import "reset.css";
+
+:root {
+	--font-main: "Ubuntu", sans-serif;
+
+	--color-bg: #38404b;
+	--color-text: #fff;
+	--color-accent: #94adcf;
+	--color-focus: rgba(204, 227, 255, 0.3);
+	--color-placeholder: rgba(148, 173, 207, 0.7);
+	--color-hover: #4e97fd;
+
+	--shadow-inner-1: 1px 1px 2px 0px rgba(66, 75, 88, 0.3), -1px -1px 2px 0px rgba(46, 53, 62, 0.5), -3px 3px 6px 0px rgba(46, 53, 62, 0.2) inset, 3px -3px 6px 0px rgba(46, 53, 62, 0.2) inset, -3px -3px 6px 0px rgba(66, 75, 88, 0.9) inset, 3px 3px 8px 0px rgba(46, 53, 62, 0.9) inset;
+
+	--shadow-inner-2: 1px 1px 2px 0px rgba(64, 74, 86, 0.3) inset, -1px -1px 2px 0px rgba(48, 54, 64, 0.5) inset, -5px 5px 10px 0px rgba(48, 54, 64, 0.2), 5px -5px 10px 0px rgba(48, 54, 64, 0.2), -5px -5px 10px 0px rgba(64, 74, 86, 0.9), 5px 5px 13px 0px rgba(48, 54, 64, 0.9);
+
+	--font-size-main: 18px;
+	--font-size-title: 32px;
+	--font-size-subtitle: 28px;
+
+	--radius-md: 16px;
+	--radius-lg: clamp(0.938rem, 5.593vw - 2.649rem, 4.063rem);
+}
+
+body {
+	font-family: var(--font-main);
+	background: var(--color-bg);
+	color: var(--color-text);
+	font-size: var(--font-size-main);
+	line-height: 1.3;
+}
+
+.wrapper {
+	min-block-size: 100%;
+	overflow: clip;
+	display: flex;
+	flex-direction: column;
+
+	> main {
+		flex-grow: 1;
+	}
+}
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+}
+.container {
+	max-width: 84.375rem;
+	inline-size: 100%;
+	padding-inline: 0.9375rem;
+	margin-inline: auto;
+}
+
+h1,
+.copy {
+	font-size: var(--font-size-title);
+	text-align: center;
+}
+
+header,
+main,
+footer {
+	padding-block: 20px;
+}
+
+.to-do-block {
+	padding: clamp(0.625rem, 4.474vw - 2.244rem, 3.125rem);
+	width: 100%;
+	border-radius: var(--radius-lg);
+	display: grid;
+	row-gap: 20px;
+}
+
+.add-item,
+.add-task,
+#add-task-input {
+	display: flex;
+	column-gap: 15px;
+	align-items: center;
+	justify-self: center;
+	max-width: 700px;
+	width: 100%;
+	padding: clamp(0rem, 2.237vw - 1.435rem, 1.25rem) clamp(0rem, 2.796vw - 0.856rem, 2.5rem);
+
+	input {
+		padding: 20px clamp(0.675rem, 2.796vw - 0.856rem, 2.5rem);
+		box-shadow: var(--shadow-inner-1);
+
+		&:focus-visible {
+			outline: 1px solid var(--color-focus);
+		}
+
+		&::placeholder {
+			color: var(--color-placeholder);
+			transition: opacity 0.5s;
+		}
+
+		&:focus-visible::placeholder {
+			opacity: 0;
+		}
+	}
+}
+.add-button,
+button {
+	width: 63px;
+	aspect-ratio: 1;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: var(--shadow-inner-2);
+	font-weight: 700;
+	transition: all 0.3s;
+	&:hover {
+		box-shadow: var(--shadow-inner-1);
+	}
+
+	svg {
+		transition: color 0.3s;
+	}
+
+	&:hover svg {
+		color: var(--color-hover);
+	}
+
+	&:focus-visible {
+		outline: 1px solid var(--color-focus);
+	}
+}
+
+.button {
+	padding: 10px 45px;
+	width: fit-content;
+	aspect-ratio: unset;
+}
+.tasks {
+	display: grid;
+	gap: 25px;
+}
+.task {
+	display: flex;
+	align-items: center;
+	column-gap: 10px;
+	justify-content: space-between;
+	padding: 20px 25px;
+	box-shadow: var(--shadow-inner-2);
+	font-weight: 500;
+	transition: all 0.3s ease;
+
+	@media (max-width: 767.98px) {
+		align-items: flex-start;
+		row-gap: 25px;
+		flex-direction: column;
+	}
+}
+.task-buttons {
+	display: flex;
+	align-items: center;
+	column-gap: 15px;
+}
+.task-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 50px;
+	aspect-ratio: 1;
+	border-radius: 10px;
+	color: var(--color-accent);
+	box-shadow: var(--shadow-inner-2);
+	svg {
+		pointer-events: none;
+		transition: color 0.3s;
+	}
+
+	&:hover {
+		box-shadow: var(--shadow-inner-1);
+	}
+
+	&:hover svg {
+		color: var(--color-hover);
+	}
+
+	&:focus-visible {
+		outline: 1px solid var(--color-focus);
+	}
+}
+.completed-list {
+	display: grid;
+	row-gap: 15px;
+
+	&.is-hidden {
+		display: none;
+	}
+
+	h2 {
+		color: var(--color-accent);
+		font-size: var(--font-size-subtitle);
+	}
+}
+.completed-tasks {
+	display: grid;
+	gap: 25px;
+}
+.completed-task {
+	padding: 20px 25px;
+	box-shadow: var(--shadow-inner-1);
+	font-weight: 500;
+	text-decoration-line: line-through;
+	transition: all 0.3s ease;
+}
+.neumorphic {
+	background-color: var(--color-bg);
+	color: var(--color-accent);
+	border-radius: var(--radius-md);
+}
