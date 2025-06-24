@@ -2,7 +2,7 @@
 @import "reset.css";
 
 :root {
-	--font-main: "Ubuntu", sans-serif;
+	--font-main: "Ubuntu", cursive;
 
 	--color-bg: #38404b;
 	--color-text: #fff;
