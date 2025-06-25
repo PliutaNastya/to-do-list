@@ -1,5 +1,7 @@
 # 📝 Vanilla JavaScript Todo List
 
+🔗 [Live Demo](https://pliutanastya.github.io/to-do-list/)
+
 ## ⚙️ Technologies
 
 - HTML5
@@ -19,4 +21,3 @@
 - `css/reset.css` — Reset Styles
 - `css/style.css` — Main Styles
 - `js/script.js` — Logic
-- `asssets/` — Icons and images
