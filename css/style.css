@@ -151,6 +151,10 @@ button {
 	box-shadow: var(--shadow-inner-2);
 	font-weight: 500;
 	transition: all 0.3s ease;
+	span {
+		width: 100%;
+		padding: 5px;
+	}
 
 	@media (max-width: 47.9988em) {
 		align-items: flex-start;

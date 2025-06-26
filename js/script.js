@@ -13,6 +13,7 @@ const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" width="23" height="22
 const iconDelete = `<svg xmlns="http://www.w3.org/2000/svg" width="23" height="22" viewBox="0 0 23 22" fill="none">
 					<path d="M18.6112 4.125H3.48621C3.30387 4.125 3.129 4.19743 3.00007 4.32636C2.87114 4.4553 2.79871 4.63016 2.79871 4.8125C2.79871 4.99484 2.87114 5.1697 3.00007 5.29864C3.129 5.42757 3.30387 5.5 3.48621 5.5H4.17371V17.875C4.17371 18.2397 4.31857 18.5894 4.57643 18.8473C4.8343 19.1051 5.18403 19.25 5.54871 19.25H16.5487C16.9134 19.25 17.2631 19.1051 17.521 18.8473C17.7788 18.5894 17.9237 18.2397 17.9237 17.875V5.5H18.6112C18.7935 5.5 18.9684 5.42757 19.0973 5.29864C19.2263 5.1697 19.2987 4.99484 19.2987 4.8125C19.2987 4.63016 19.2263 4.4553 19.0973 4.32636C18.9684 4.19743 18.7935 4.125 18.6112 4.125ZM16.5487 17.875H5.54871V5.5H16.5487V17.875ZM6.92371 2.0625C6.92371 1.88016 6.99614 1.7053 7.12507 1.57636C7.254 1.44743 7.42887 1.375 7.61121 1.375H14.4862C14.6685 1.375 14.8434 1.44743 14.9723 1.57636C15.1013 1.7053 15.1737 1.88016 15.1737 2.0625C15.1737 2.24484 15.1013 2.4197 14.9723 2.54864C14.8434 2.67757 14.6685 2.75 14.4862 2.75H7.61121C7.42887 2.75 7.254 2.67757 7.12507 2.54864C6.99614 2.4197 6.92371 2.24484 6.92371 2.0625Z" fill="currentColor"></path>
 				</svg>`
+const iconEdit = `<svg viewBox="-10.08 -10.08 44.16 44.16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14.3601 4.07866L15.2869 3.15178C16.8226 1.61607 19.3125 1.61607 20.8482 3.15178C22.3839 4.68748 22.3839 7.17735 20.8482 8.71306L19.9213 9.63993M14.3601 4.07866C14.3601 4.07866 14.4759 6.04828 16.2138 7.78618C17.9517 9.52407 19.9213 9.63993 19.9213 9.63993M14.3601 4.07866L5.83882 12.5999C5.26166 13.1771 4.97308 13.4656 4.7249 13.7838C4.43213 14.1592 4.18114 14.5653 3.97634 14.995C3.80273 15.3593 3.67368 15.7465 3.41556 16.5208L2.32181 19.8021M19.9213 9.63993L11.4001 18.1612C10.8229 18.7383 10.5344 19.0269 10.2162 19.2751C9.84082 19.5679 9.43469 19.8189 9.00498 20.0237C8.6407 20.1973 8.25352 20.3263 7.47918 20.5844L4.19792 21.6782M4.19792 21.6782L3.39584 21.9456C3.01478 22.0726 2.59466 21.9734 2.31063 21.6894C2.0266 21.4053 1.92743 20.9852 2.05445 20.6042L2.32181 19.8021M4.19792 21.6782L2.32181 19.8021" stroke="currentColor" stroke-width="1"></path> </g></svg>`
 
 // Create an empty array for tasks
 let tasksList = []
@@ -51,9 +52,10 @@ const renderTaskItem = (taskText, taskId, isCompleted = false) => {
 	taskItem.dataset.id = taskId
 
 	taskItem.innerHTML = `
-	<span>${taskText}</span>
+	<span contentEditable="false">${taskText}</span>
 	<div class="task-buttons">
 	${!isCompleted ? `
+		<button class="edit-button task-button" aria-label="Edit task">${iconEdit}</button>
 		<button class="check-button task-button" aria-label="Check task">${iconCheck}</button>
 		` : ''}
 		<button class="delete-button task-button" aria-label="Remove task">
@@ -98,6 +100,70 @@ const checkTask = (id) => {
 	}
 }
 
+// Function to edit task
+const editTask = (id) => {
+	const taskElement = document.querySelector(`.task[data-id="${id}"`)
+	let cancelled = false
+
+	if (taskElement) {
+		const taskSpan = taskElement.querySelector('span')
+		const originalText = taskSpan.innerText
+		taskSpan.contentEditable = 'true'
+		taskSpan.focus()
+
+		const range = document.createRange()
+
+		range.selectNodeContents(taskSpan)
+		range.collapse(false)
+
+		const selection = window.getSelection()
+		selection.removeAllRanges()
+		selection.addRange(range)
+
+
+		taskSpan.addEventListener('blur', () => {
+			if (cancelled) {
+				taskSpan.contentEditable = 'false'
+				return
+			}
+			const newText = taskSpan.innerText.trim()
+
+			if (newText !== '') {
+				const task = tasksList.find(task => task.id === id)
+				task.title = newText
+				updateLocalStorage()
+				taskSpan.contentEditable = 'false'
+				rerenderTasks()
+			}
+		})
+
+
+
+		taskSpan.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				e.preventDefault()
+				taskSpan.contentEditable = 'false'
+
+				const newText = taskSpan.innerText.trim()
+
+				if (newText !== '') {
+					const task = tasksList.find(task => task.id === id)
+					task.title = newText
+					updateLocalStorage()
+					rerenderTasks()
+				}
+			}
+
+			if (e.key === 'Escape') {
+				cancelled = true
+				e.preventDefault()
+				taskSpan.textContent = originalText
+				taskSpan.contentEditable = 'false'
+			}
+		})
+	}
+}
+
 // Add new task when form is submitted
 taskForm.addEventListener('submit', (e) => {
 	e.preventDefault()
@@ -125,6 +191,10 @@ document.addEventListener('click', (e) => {
 
 		if (targetElement.tagName === 'BUTTON' && targetElement.classList.contains('check-button')) {
 			checkTask(currentTaskId)
+		}
+
+		if (targetElement.tagName === 'BUTTON' && targetElement.classList.contains('edit-button')) {
+			editTask(currentTaskId)
 		}
 	}
 })
