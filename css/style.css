@@ -99,6 +99,7 @@ svg {
 }
 /* Styles for buttons */
 button {
+	position: relative;
 	width: 3.9375rem;
 	aspect-ratio: 1;
 	flex-shrink: 0;
@@ -109,12 +110,26 @@ button {
 	font-weight: 700;
 	transition: box-shadow 0.7s;
 
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		box-shadow: var(--shadow-inner-1);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+		pointer-events: none;
+	}
+
 	&:disabled {
 		opacity: 0.3;
 	}
 	@media (any-hover: hover), (pointer: fine) {
+		&:hover::before {
+			opacity: 1;
+		}
 		&:hover {
-			box-shadow: var(--shadow-inner-1);
+			box-shadow: none;
 		}
 	}
 
