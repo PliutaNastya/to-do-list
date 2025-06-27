@@ -21,8 +21,9 @@
 
 /* Common styles */
 body {
+	height: 100%;
 	font-family: var(--font-main);
-	background: var(--color-bg);
+	background: var(--color-bg) center / 100% fixed;
 	color: var(--color-text);
 	font-size: 1.125rem;
 	line-height: 1.3;
@@ -107,6 +108,10 @@ button {
 	box-shadow: var(--shadow-inner-2);
 	font-weight: 700;
 	transition: box-shadow 0.7s;
+
+	&:disabled {
+		opacity: 0.3;
+	}
 	@media (any-hover: hover), (pointer: fine) {
 		&:hover {
 			box-shadow: var(--shadow-inner-1);
@@ -136,11 +141,17 @@ button {
 	display: flex;
 	align-items: center;
 	column-gap: 15px;
+	@media (hover: none) and (pointer: coarse) {
+		&>*:not(.settings-button) {
+			display: none;
+		}
+	}
 }
 /* Styles fot tasks block */
 .tasks {
 	display: grid;
 	gap: 25px;
+	counter-reset: task;
 }
 .task {
 	display: flex;
@@ -154,12 +165,17 @@ button {
 	span {
 		width: 100%;
 		padding: 5px;
+		word-break: break-word;
+		overflow-wrap: break-word;
 	}
-
-	@media (max-width: 47.9988em) {
-		align-items: flex-start;
-		row-gap: 25px;
-		flex-direction: column;
+}
+.active-task {
+	&::before {
+		counter-increment: task;
+		content: counter(task, decimal-leading-zero) ".";
+		flex-shrink: 0;
+		align-self: flex-start;
+		padding-top: 13px;
 	}
 }
 /* Styles for completed tasks block */
@@ -178,6 +194,10 @@ button {
 	font-weight: 500;
 	text-decoration-line: line-through;
 	transition: all 0.3s ease;
+
+	.delete-button {
+		display: flex;
+	}
 }
 /* ========= */
 .is-hidden {
@@ -187,4 +207,56 @@ button {
 	background-color: var(--color-bg);
 	color: var(--color-accent);
 	border-radius: var(--radius-md);
+}
+.drag-over {
+	background-color: rgba(148, 173, 207, 0.1);
+	outline: 1px dashed var(--color-accent);
+	border-radius: var(--radius-md);
+	transition:
+		background-color 0.3s linear,
+		outline 0.3s linear;
+}
+.drag-and-drop-button {
+	cursor: grab;
+
+	@media (hover: none) and (pointer: coarse) {
+		display: none;
+	}
+}
+.drag-and-drop-button:active {
+	cursor: grabbing;
+}
+.settings-button {
+	@media (any-hover: hover), (pointer: fine) {
+		display: none;
+	}
+}
+.settings-menu.active {
+	position: fixed;
+	width: 85%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: var(--color-bg);
+	box-shadow: var(--shadow-inner-2);
+	border-radius: var(--radius-md);
+
+	padding: 1.875rem 0.9375rem;
+	display: flex;
+	gap: 0.9375rem;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+body.overflow-hidden {
+	position: relative;
+	overflow: hidden;
+	&::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100vh;
+		background-color: rgba(0, 0, 0, 0.3);
+	}
 }
