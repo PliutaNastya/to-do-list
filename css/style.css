@@ -160,6 +160,10 @@ body.touch-device {
 	.settings-button {
 		display: flex;
 	}
+
+	.completed-task .delete-button {
+		display: flex;
+	}
 }
 .task-buttons {
 	display: flex;
