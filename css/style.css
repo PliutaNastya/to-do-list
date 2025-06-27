@@ -137,21 +137,46 @@ button {
 	border-radius: 0.625rem;
 	color: var(--color-accent);
 }
+.drag-and-drop-button {
+	cursor: grab;
+	@media (any-hover: none), (pointer: coarse) {
+		display: none;
+	}
+}
+.drag-and-drop-button:active {
+	cursor: grabbing;
+}
+.settings-button {
+	display: none;
+}
+body.touch-device {
+	.task-buttons > *:not(.settings-button) {
+		display: none;
+	}
+	.drag-and-drop-button {
+		display: none;
+	}
+
+	.settings-button {
+		display: flex;
+	}
+}
 .task-buttons {
 	display: flex;
 	align-items: center;
 	column-gap: 15px;
-	@media (hover: none) and (pointer: coarse) {
-		&>*:not(.settings-button) {
-			display: none;
-		}
-	}
 }
 /* Styles fot tasks block */
 .tasks {
 	display: grid;
 	gap: 25px;
 	counter-reset: task;
+
+	@media (any-hover: none), (pointer: coarse) {
+		.task-buttons >*:not(.settings-button) {
+			display: none;
+		}
+	}
 }
 .task {
 	display: flex;
@@ -216,21 +241,6 @@ button {
 		background-color 0.3s linear,
 		outline 0.3s linear;
 }
-.drag-and-drop-button {
-	cursor: grab;
-
-	@media (hover: none) and (pointer: coarse) {
-		display: none;
-	}
-}
-.drag-and-drop-button:active {
-	cursor: grabbing;
-}
-.settings-button {
-	@media (any-hover: hover), (pointer: fine) {
-		display: none;
-	}
-}
 .settings-menu.active {
 	position: fixed;
 	width: 85%;
@@ -238,7 +248,6 @@ button {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	background-color: var(--color-bg);
-	box-shadow: var(--shadow-inner-2);
 	border-radius: var(--radius-md);
 
 	padding: 1.875rem 0.9375rem;

@@ -1,4 +1,10 @@
 "use strict"
+if (
+	('ontouchstart' in window || navigator.maxTouchPoints > 0) &&
+	window.matchMedia('(pointer: coarse)').matches
+) {
+	document.body.classList.add('touch-device')
+}
 
 // Select DOM Elements
 const taskForm = document.getElementById('task-form')
@@ -97,7 +103,7 @@ const rerenderTasks = () => {
 	completedListElement.innerHTML = ''
 	const tasksToDo = tasksList.filter(task => !task.isCompleted)
 	const completedTasks = tasksList.filter(task => task.isCompleted)
-		
+
 	tasksToDo.forEach((task, index) => {
 		const taskItem = renderTaskItem(task.title, task.id, task.isCompleted, index, tasksToDo.length)
 		tasksListElement.appendChild(taskItem)
